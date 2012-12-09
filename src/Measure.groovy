@@ -1,4 +1,4 @@
 protected class Measure {
-    protected long start
+    private long start
     protected long elapse
 }

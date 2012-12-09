@@ -1,15 +1,20 @@
-import static java.util.concurrent.TimeUnit.NANOSECONDS
-
 protected class Sample {
-    protected float mean, min, max, count
+    protected float mean, min, max
+    protected long count
 
-    protected Sample(Collection<Measure> measures) {
-        def elapsed = measures.collect { Measure measure -> NANOSECONDS.toMillis(measure.elapse)  }
-        count = measures.size()
+    protected Sample(Collection<Measure> measures, long iteration) {
+        def elapsed = measures.collect { measure -> measure.elapse }
+        count = iteration * measures.size()
         mean = elapsed.sum() / count
-        min = elapsed.min()
-        max = elapsed.max()
+        min = elapsed.min() / iteration
+        max = elapsed.max() / iteration
     }
 
-    public String toString() { "mean=$mean ms, min=$min ms, max=$max ms, count=$count" }
+    private static String unit(float timeInNs) {
+        if (timeInNs < 1000000f) {
+            return "$timeInNs ns"
+        } else return "${timeInNs / 1000000} ms"
+    }
+
+    public String toString() { "mean=${unit mean}, min=${unit min}, max=${unit max}, count=$count" }
 }
