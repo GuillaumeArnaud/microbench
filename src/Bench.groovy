@@ -1,35 +1,39 @@
+import groovy.transform.CompileStatic
+import groovy.transform.TypeChecked
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
 
 import static java.lang.System.currentTimeMillis
 import static java.util.concurrent.TimeUnit.SECONDS
 
-public class Bench {
+public class Bench<T> {
     long sampleSec = 1
-    int nbUser = 10
+    int vusers = 10
     long durationMs = 10 * 1000
     long iteration = 1
 
     Actor sampler
-    Closure test
+    Test<T> test
+    T objectUnderTest
 
     // warmup the test method before the measurements
     def warmup = { duration, test ->
         println "[${new Date(currentTimeMillis())}] start warmup during $duration s"
         long start = currentTimeMillis()
-        while (currentTimeMillis() - start < duration * 1000) test()
+        while (currentTimeMillis() - start < duration * 1000) test(objectUnderTest)
         println "[${new Date(currentTimeMillis())}] end of warmup"
         test
     }
 
-    def tempo = { long elapseInMs ->  }  // nothing to do
+    Closure<Void> tempo = { long elapseInMs ->  }  // nothing to do
 
-    def static pause = { long pauseInMs, elapseInMs ->
+    static Closure<Void> pause = { long pauseInMs, elapseInMs ->
         sleep(pauseInMs)
     }
 
-    def static pacing = { long pacingInMs, long elapseInMs ->
+    static Closure<Void> pacing = { long pacingInMs, long elapseInMs ->
         sleep(Math.max(1l, pacingInMs - elapseInMs))
+        return
     }
 
     def start() {
@@ -38,11 +42,11 @@ public class Bench {
         sampler.start()
 
         // initialisation of users
-        def group = new DefaultPGroup(nbUser)
-        def users = new Actor[nbUser]
-        nbUser.times {
+        def group = new DefaultPGroup(vusers)
+        def users = new Actor[vusers]
+        vusers.times {
             int id ->
-                def user = new User(tempo: tempo, sampler: sampler, iteration: iteration, test: test)
+                def user = new User<T>(tempo: tempo, sampler: sampler, iteration: iteration, test: test, objUnderTest: objectUnderTest)
                 user.setParallelGroup(group)
                 users[id] =  user.start()
         }
@@ -55,7 +59,7 @@ public class Bench {
         println "[${ new Date(currentTimeMillis()) }] start the bench"
         warmup(1, test)
 
-        nbUser.times { id -> feeder.send id }
+        vusers.times { id -> feeder.send id }
 
         feeder.join()
 
