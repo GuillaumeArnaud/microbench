@@ -1,5 +1,6 @@
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.actor.DefaultActor
+import java.util.concurrent.TimeUnit
 
 import static java.lang.System.currentTimeMillis
 
@@ -17,7 +18,7 @@ class Feeder extends DefaultActor {
                 if (currentTimeMillis() - startMs > durationMs) {
                     // end of the benchmark.
                     // terminate all user actors
-                    users.each { Actor user -> user.send(-1) }
+                    users.each { Actor user -> user.sendAndWait(-1, 5, TimeUnit.SECONDS) }
                     println "[${new Date(currentTimeMillis())}] terminate";
                     terminate();
                 } else users[id].send id

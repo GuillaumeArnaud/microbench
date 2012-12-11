@@ -1,6 +1,6 @@
 import groovyx.gpars.actor.DefaultActor
 
-protected class Sampler extends DefaultActor {
+class Sampler extends DefaultActor {
     private Collection<Measure> measures = []
     private Measure firstSample = null
     private long sampleNs = 0
@@ -8,17 +8,17 @@ protected class Sampler extends DefaultActor {
 
     protected void act() {
         loop {
-            react { Measure m ->
+            react { Measure measure ->
                 if (measures.size() == 0) {
-                    measures.add(m)
+                    measures.add(measure)
                     firstSample = measures[0]
-                } else if (m.start - firstSample.start > sampleNs) {
+                } else if (measure.start - firstSample.start > sampleNs) {
                     Sample sample = new Sample(measures, iteration)
                     println sample
-                    firstSample = m
-                    measures = [m]
+                    firstSample = measure
+                    measures = [measure]
                 } else {
-                    measures << m
+                    measures << measure
                 }
             }
         }

@@ -1,4 +1,4 @@
-protected class Sample {
+class Sample {
     protected float mean, min, max
     protected long count
 

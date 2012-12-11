@@ -1,3 +1,4 @@
+import groovy.transform.CompileStatic
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.actor.DefaultActor
 
@@ -14,28 +15,25 @@ class User extends DefaultActor {
 
     protected void act() {
         loop {
-            react { userid ->
+            react { int userid ->
                 if (userid < 0) terminate()
-                else {
-                    tempo(measure(test))
-                    reply userid
-                }
+                else tempo(measure(test))
+                reply userid
             }
         }
     }
 
-    def measure = { test ->
-        {->
-            def result
-            // init
-            long start = nanoTime()
-            // call
-            iteration.times { result = test.call() }
-            // measure
-            long elapse = nanoTime() - start
-            sampler.send new Measure(start: start, elapse: elapse)
-            elapse
-        }
+    @CompileStatic
+    private long measure(Closure test) {
+        def result
+        // init
+        long start = nanoTime()
+        // call
+        for (int i = 0; i < iteration; i++) test.call()
+        // measure
+        long elapse = nanoTime() - start
+        sampler.send new Measure(start, elapse)
+        elapse
     }
 
 }

@@ -1,7 +1,7 @@
 import groovyx.gpars.actor.Actor
+import groovyx.gpars.group.DefaultPGroup
 
 import static java.lang.System.currentTimeMillis
-import static java.util.concurrent.TimeUnit.NANOSECONDS
 import static java.util.concurrent.TimeUnit.SECONDS
 
 public class Bench {
@@ -22,16 +22,14 @@ public class Bench {
         test
     }
 
-    def tempo = { test -> test() }
+    def tempo = { long elapseInMs ->  }  // nothing to do
 
-    def static pause = { long pauseInMillis, Closure test ->
-        test()
-        sleep(pauseInMillis)
+    def static pause = { long pauseInMs, elapseInMs ->
+        sleep(pauseInMs)
     }
 
-    def static pacing = { long pacingInMs, Closure measure ->
-        long elapsed = NANOSECONDS.toMillis(measure())
-        if (elapsed < pacingInMs) sleep(Math.max(1l, pacingInMs - elapsed))
+    def static pacing = { long pacingInMs, long elapseInMs ->
+        sleep(Math.max(1l, pacingInMs - elapseInMs))
     }
 
     def start() {
@@ -40,10 +38,13 @@ public class Bench {
         sampler.start()
 
         // initialisation of users
+        def group = new DefaultPGroup(nbUser)
         def users = new Actor[nbUser]
         nbUser.times {
             int id ->
-                users[id] = new User(tempo: tempo, sampler: sampler, iteration: iteration, test: test).start()
+                def user = new User(tempo: tempo, sampler: sampler, iteration: iteration, test: test)
+                user.setParallelGroup(group)
+                users[id] =  user.start()
         }
 
         // initialisation of feeders
