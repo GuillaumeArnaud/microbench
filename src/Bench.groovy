@@ -1,5 +1,3 @@
-import groovy.transform.CompileStatic
-import groovy.transform.TypeChecked
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
 
@@ -15,20 +13,23 @@ public class Bench<T> {
     Actor sampler
     Test<T> test
     T objectUnderTest
+    Data data = new Data([])
+    long warmupMs = 1000
 
     // warmup the test method before the measurements
-    def warmup = { duration, test ->
+    def warmup = { long duration, Test<T> test ->
         println "[${new Date(currentTimeMillis())}] start warmup during $duration s"
         long start = currentTimeMillis()
-        while (currentTimeMillis() - start < duration * 1000) test(objectUnderTest)
+        while (currentTimeMillis() - start < duration) test.call(objectUnderTest, data.next())
+        data.reset()
         println "[${new Date(currentTimeMillis())}] end of warmup"
-        test
     }
 
-    Closure<Void> tempo = { long elapseInMs ->  }  // nothing to do
+    Closure<Void> tempo = { long elapseInMs -> return }  // nothing to do
 
     static Closure<Void> pause = { long pauseInMs, elapseInMs ->
         sleep(pauseInMs)
+        return
     }
 
     static Closure<Void> pacing = { long pacingInMs, long elapseInMs ->
@@ -37,6 +38,8 @@ public class Bench<T> {
     }
 
     def start() {
+        warmup(warmupMs, test)
+
         // initialisation of the sampler
         sampler = new Sampler(sampleNs: SECONDS.toNanos(sampleSec), iteration: iteration)
         sampler.start()
@@ -46,18 +49,16 @@ public class Bench<T> {
         def users = new Actor[vusers]
         vusers.times {
             int id ->
-                def user = new User<T>(tempo: tempo, sampler: sampler, iteration: iteration, test: test, objUnderTest: objectUnderTest)
+                def user = new User<T>(id: id, tempo: tempo, sampler: sampler, iteration: iteration, test: test, objUnderTest: objectUnderTest)
                 user.setParallelGroup(group)
-                users[id] =  user.start()
+                users[id] = user.start()
         }
 
+
         // initialisation of feeders
-        Actor feeder = new Feeder(users: users, durationMs: durationMs).start()
-
-
+        Actor feeder = new Feeder(users: users, durationMs: durationMs, data: data).start()
 
         println "[${ new Date(currentTimeMillis()) }] start the bench"
-        warmup(1, test)
 
         vusers.times { id -> feeder.send id }
 

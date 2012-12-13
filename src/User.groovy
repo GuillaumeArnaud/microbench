@@ -9,6 +9,7 @@ import static java.lang.System.nanoTime
  */
 class User<T> extends DefaultActor {
 
+    private id
     private Actor sampler
     private Closure tempo
     private Test<T> test
@@ -17,21 +18,20 @@ class User<T> extends DefaultActor {
 
     protected void act() {
         loop {
-            react { int userid ->
-                if (userid < 0) terminate()
-                else tempo(measure(test))
-                reply userid
+            react { Collection<Object> data ->
+                tempo(measure(test, data))
+                reply id
             }
         }
     }
 
     @CompileStatic
-    private long measure(Test<T> test) {
+    private long measure(Test<T> test, Collection<Object> data) {
         def result
         // init
         long start = nanoTime()
         // call
-        for (int i = 0; i < iteration; i++) test.call(objUnderTest)
+        for (int i = 0; i < iteration; i++) test.call(objUnderTest, data)
         // measure
         long elapse = nanoTime() - start
         sampler.send new Measure(start, elapse)

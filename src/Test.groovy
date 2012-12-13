@@ -4,5 +4,5 @@ import groovy.transform.TypeChecked
 @CompileStatic
 interface Test<T> {
     @TypeChecked
-    public void call(T objectUnderTest);
+    public void call(T objectUnderTest, Collection<Object> data);
 }
