@@ -12,6 +12,7 @@ public class Bench<T> {
 
     Actor sampler
     Test<T> test
+    Collection<Test<T>> tests
     T objectUnderTest
     Data data = new Data([])
     long warmupMs = 1000
@@ -38,6 +39,12 @@ public class Bench<T> {
     }
 
     def start() {
+        if (tests != null) {
+            for(Test<T> test:tests) { call(test) }
+        } else call(test)
+    }
+
+    def call(Test<T> test) {
         warmup(warmupMs, test)
 
         // initialisation of the sampler
@@ -53,7 +60,6 @@ public class Bench<T> {
                 user.setParallelGroup(group)
                 users[id] = user.start()
         }
-
 
         // initialisation of feeders
         Actor feeder = new Feeder(users: users, durationMs: durationMs, data: data).start()
