@@ -1,3 +1,5 @@
+package fr.xebia.microbench
+
 class Measure {
     protected long start
     protected long elapse

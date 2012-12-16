@@ -1,0 +1,58 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+version = '0.1'
+
+project.ext {
+    group = 'fr.xebia'
+    artifact = 'microbench'
+
+    bundleDir = "$buildDir/bundle"
+    groovyVersion = "2.0.5"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    groovy group: 'org.codehaus.groovy', name: 'groovy', version: project.ext.groovyVersion
+    groovy group: 'org.codehaus.gpars', name: 'gpars', version: "1.0.0-rc1"
+}
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
+    }
+}
+
+task pom << {
+    pom {
+        project {
+            groupId project.ext.group
+            artifactId project.ext.artifact
+            name 'microbench'
+            description 'Benchmark your java/groovy methods'
+            url ''
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url 'http://github.com/GuillaumeArnaud/microbench'
+            }
+            developers {
+                developer {
+                    name 'Guillaume Arnaud'
+                    email 'garnaud25@gmail.com'
+                    url 'https://twitter.com/guillarnaud'
+                }
+            }
+        }
+    }.writeTo("$buildDir/pom.xml")
+}

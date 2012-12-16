@@ -18,7 +18,7 @@ class Tests {
                 vusers: 1,
                 durationMs: SECONDS.toMillis(10),
                 iteration: 1,
-                tempo: pacing.curry(10),
+                tempo: fr.xebia.microbench.Bench.pacing.curry(10),
                 objectUnderTest: null,
                 warmupMs: SECONDS.toMillis(5),
                 data: new Data([[0], [1], [0.5]])
@@ -36,7 +36,7 @@ class Tests {
                 durationMs: SECONDS.toMillis(10),
                 sampleSec: 1,
                 iteration: 1,
-                tempo: pacing.curry(5),
+                tempo: fr.xebia.microbench.Bench.pacing.curry(5),
                 objectUnderTest: Logger.getLogger("test")
                 //tempo: { Closure closure -> pause(0, closure) }
         ).start()

@@ -1,3 +1,5 @@
+package fr.xebia.microbench
+
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.actor.DefaultActor
 

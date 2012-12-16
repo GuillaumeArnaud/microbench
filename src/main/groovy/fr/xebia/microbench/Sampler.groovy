@@ -1,3 +1,5 @@
+package fr.xebia.microbench
+
 import groovyx.gpars.actor.DefaultActor
 
 class Sampler extends DefaultActor {

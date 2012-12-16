@@ -1,3 +1,5 @@
+package fr.xebia.microbench
+
 class Sample {
     protected float mean, min, max
     protected long count

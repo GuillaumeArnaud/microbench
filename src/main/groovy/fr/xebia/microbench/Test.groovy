@@ -1,3 +1,5 @@
+package fr.xebia.microbench
+
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
 
