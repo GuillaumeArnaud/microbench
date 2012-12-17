@@ -4,6 +4,8 @@ import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
 
 import static java.lang.System.currentTimeMillis
+import static java.lang.System.getProperty
+import static java.lang.System.getenv
 import static java.util.concurrent.TimeUnit.SECONDS
 
 public class Bench<T> {
@@ -40,7 +42,11 @@ public class Bench<T> {
     }
 
     def start() {
+        println "JVM: ${System.getProperty('java.vm.name')} - ${System.getProperty('java.vm.vendor')} - ${System.getProperty('java.version')}"
+        println "OS: ${System.getProperty('os.name')} - ${System.getProperty('os.arch')}"
+        int i=1
         for (Test<T> test : tests) {
+            println "test $i:"
             call(test)
         }
     }
