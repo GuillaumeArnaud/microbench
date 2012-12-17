@@ -1,5 +1,7 @@
-package fr.xebia.microbench
+package fr.xebia.microbench.actors
 
+import fr.xebia.microbench.internals.Measure
+import fr.xebia.microbench.Test
 import groovy.transform.CompileStatic
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.actor.DefaultActor

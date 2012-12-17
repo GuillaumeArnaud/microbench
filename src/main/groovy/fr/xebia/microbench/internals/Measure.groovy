@@ -1,4 +1,4 @@
-package fr.xebia.microbench
+package fr.xebia.microbench.internals
 
 class Measure {
     protected long start

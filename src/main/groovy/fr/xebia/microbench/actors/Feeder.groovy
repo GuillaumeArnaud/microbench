@@ -1,4 +1,4 @@
-package fr.xebia.microbench
+package fr.xebia.microbench.actors
 
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.actor.DefaultActor

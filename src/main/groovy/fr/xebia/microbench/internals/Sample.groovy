@@ -1,4 +1,6 @@
-package fr.xebia.microbench
+package fr.xebia.microbench.internals
+
+import fr.xebia.microbench.internals.Measure
 
 class Sample {
     protected float mean, min, max

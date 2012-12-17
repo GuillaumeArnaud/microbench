@@ -1,4 +1,4 @@
-package fr.xebia.microbench
+package fr.xebia.microbench.actors
 
 import groovyx.gpars.actor.DefaultActor
 
@@ -12,7 +12,7 @@ class Data extends DefaultActor {
         iterator = this.dataCollection.iterator()
     }
 
-    protected Collection<Object> next() {
+    public Collection<Object> next() {
         if (dataCollection.size() == 0) return null
         else if (iterator.hasNext()) return iterator.next()
         else {
@@ -22,6 +22,6 @@ class Data extends DefaultActor {
         }
     }
 
-    protected void reset() { iterator = dataCollection.iterator() }
+    public void reset() { iterator = dataCollection.iterator() }
 
 }
