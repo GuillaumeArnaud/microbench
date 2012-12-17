@@ -1,7 +1,7 @@
 package fr.xebia.microbench.internals
 
 class Measure {
-    protected long start
+    public long start
     protected long elapse
 
     Measure(long start, long elapse) {

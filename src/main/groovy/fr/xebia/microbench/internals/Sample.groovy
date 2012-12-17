@@ -1,12 +1,10 @@
 package fr.xebia.microbench.internals
 
-import fr.xebia.microbench.internals.Measure
-
 class Sample {
     protected float mean, min, max
     protected long count
 
-    protected Sample(Collection<Measure> measures, long iteration) {
+    public Sample(Collection<Measure> measures, long iteration) {
         def elapsed = measures.collect { measure -> measure.elapse }
         count = iteration * measures.size()
         mean = elapsed.sum() / count
