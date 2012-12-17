@@ -13,7 +13,6 @@ public class Bench<T> {
     long iteration = 1
 
     Actor sampler
-    Test<T> test
     Collection<Test<T>> tests
     T objectUnderTest
     Data data = new Data([])
@@ -41,9 +40,9 @@ public class Bench<T> {
     }
 
     def start() {
-        if (tests != null) {
-            for(Test<T> test:tests) { call(test) }
-        } else call(test)
+        for (Test<T> test : tests) {
+            call(test)
+        }
     }
 
     def call(Test<T> test) {
