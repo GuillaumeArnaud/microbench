@@ -1,5 +1,7 @@
 package fr.xebia.microbench.internals
 
+import static java.util.concurrent.TimeUnit.NANOSECONDS
+
 class Tempo {
 
     static Closure<Void> pause = { long pauseInMs, elapseInMs ->
@@ -7,8 +9,8 @@ class Tempo {
         return
     }
 
-    static Closure<Void> pacing = { long pacingInMs, long elapseInMs ->
-        sleep(Math.max(1l, pacingInMs - elapseInMs))
+    static Closure<Void> pacing = { long pacingInMs, long elapseNs ->
+        sleep(Math.max(1l, pacingInMs - NANOSECONDS.toMillis(elapseNs)))
         return
     }
 }

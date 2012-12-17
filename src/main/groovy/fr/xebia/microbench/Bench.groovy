@@ -43,9 +43,9 @@ public class Bench<T> {
 
         int i = 1
         for (Test<T> test : tests) {
-            warmup.run(test)
-            println "test $i:"
+            println "test ${i++}:"
             call(test)
+
         }
 
         timer.cancel()
