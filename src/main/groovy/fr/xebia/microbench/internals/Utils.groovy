@@ -13,4 +13,10 @@ class Utils {
         else if (bytes > 1024) "${round((float) bytes / (1024))}KB"
         else "${round((float) bytes / (1024))}B"
     }
+
+    public static String unit(float timeInNs) {
+        if (timeInNs < 1000000f) {
+            return "$timeInNs ns"
+        } else return "${timeInNs / 1000000} ms"
+    }
 }

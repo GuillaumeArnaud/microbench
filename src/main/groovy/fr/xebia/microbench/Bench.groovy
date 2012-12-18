@@ -3,6 +3,7 @@ package fr.xebia.microbench
 import fr.xebia.microbench.actors.Data
 import fr.xebia.microbench.actors.Feeder
 import fr.xebia.microbench.actors.Sampler
+import fr.xebia.microbench.actors.Summary
 import fr.xebia.microbench.actors.User
 import fr.xebia.microbench.internals.WarmUp
 import groovyx.gpars.actor.Actor
@@ -20,7 +21,8 @@ public class Bench<T> {
     long durationMs = 10 * 1000
     long iteration = 1
 
-    Actor sampler
+    Sampler sampler
+    Summary summary
     Collection<Test<T>> tests
     T objectUnderTest
     Data data = new Data([])
@@ -34,7 +36,7 @@ public class Bench<T> {
 
     Closure<Map<String, Object>> collector = null
 
-    def start() {
+    public void start() {
         println "JVM: ${System.getProperty('java.vm.name')} - ${System.getProperty('java.vm.vendor')} - ${System.getProperty('java.version')} - max heap size = ${prettyBytes(getRuntime().maxMemory())}"
         println "OS: ${System.getProperty('os.name')} - ${System.getProperty('os.arch')} - ${getRuntime().availableProcessors()} processors"
         if (collector) timer.schedule({ println collector.call() } as TimerTask, 0, SECONDS.toMillis(sampleCollectorSec))
@@ -43,20 +45,21 @@ public class Bench<T> {
 
         int i = 1
         for (Test<T> test : tests) {
-            println "test ${i++}:"
+            context("${i++}")
             call(test)
-
         }
 
         timer.cancel()
     }
 
-    def call(Test<T> test) {
+    public void call(Test<T> test) {
         warmup.run(test)
 
+        // initialisation of the summary
+        summary = new Summary().start() as Summary
+
         // initialisation of the sampler
-        sampler = new Sampler(sampleNs: SECONDS.toNanos(sampleSec), iteration: iteration)
-        sampler.start()
+        sampler = new Sampler(sampleNs: SECONDS.toNanos(sampleSec), iteration: iteration, summary: summary).start() as Sampler
 
         // initialisation of users
         def group = new DefaultPGroup(vusers)
@@ -78,7 +81,16 @@ public class Bench<T> {
         feeder.join()
 
         println "[${ new Date(currentTimeMillis()) }] stop the bench"
+        println summary
+    }
 
+    public void context(String id) {
+        println """
+            Test $id
+            JVM: ${System.getProperty('java.vm.name')} - ${System.getProperty('java.vm.vendor')} - ${System.getProperty('java.version')} - max heap size = ${prettyBytes(getRuntime().maxMemory())}
+            OS: ${System.getProperty('os.name')} - ${System.getProperty('os.arch')} - ${getRuntime().availableProcessors()} processors
+            User: ${durationMs}ms - ${vusers} vuser(s) - sample of ${sampleSec}s
+        """
     }
 
 }

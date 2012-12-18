@@ -9,6 +9,7 @@ class Sampler extends DefaultActor {
     private Measure firstSample = null
     private long sampleNs = 0
     private long iteration = 1
+    public Summary summary
 
     protected void act() {
         loop {
@@ -21,6 +22,7 @@ class Sampler extends DefaultActor {
                     println sample
                     firstSample = measure
                     measures = [measure]
+                    summary.send sample
                 } else {
                     measures << measure
                 }

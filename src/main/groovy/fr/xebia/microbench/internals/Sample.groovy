@@ -1,8 +1,10 @@
 package fr.xebia.microbench.internals
 
+import static fr.xebia.microbench.internals.Utils.unit
+
 class Sample {
-    protected float mean, min, max
-    protected long count
+    public float mean, min, max
+    public long count
 
     public Sample(Collection<Measure> measures, long iteration) {
         def elapsed = measures.collect { measure -> measure.elapse }
@@ -12,11 +14,7 @@ class Sample {
         max = elapsed.max() / iteration
     }
 
-    private static String unit(float timeInNs) {
-        if (timeInNs < 1000000f) {
-            return "$timeInNs ns"
-        } else return "${timeInNs / 1000000} ms"
-    }
+
 
     public String toString() { "mean=${unit mean}, min=${unit min}, max=${unit max}, count=$count" }
 }
