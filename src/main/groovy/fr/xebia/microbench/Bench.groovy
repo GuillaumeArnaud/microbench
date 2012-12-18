@@ -37,15 +37,14 @@ public class Bench<T> {
     Closure<Map<String, Object>> collector = null
 
     public void start() {
-        println "JVM: ${System.getProperty('java.vm.name')} - ${System.getProperty('java.vm.vendor')} - ${System.getProperty('java.version')} - max heap size = ${prettyBytes(getRuntime().maxMemory())}"
-        println "OS: ${System.getProperty('os.name')} - ${System.getProperty('os.arch')} - ${getRuntime().availableProcessors()} processors"
+        context()
         if (collector) timer.schedule({ println collector.call() } as TimerTask, 0, SECONDS.toMillis(sampleCollectorSec))
 
         warmup = new WarmUp<>(objectUnderTest: objectUnderTest, data: data, duration: warmupMs, collector: collector)
 
         int i = 1
         for (Test<T> test : tests) {
-            context("${i++}")
+            println "test ${i++}"
             call(test)
         }
 
@@ -84,12 +83,13 @@ public class Bench<T> {
         println summary
     }
 
-    public void context(String id) {
+    public void context() {
         println """
-            Test $id
+            Context
+
             JVM: ${System.getProperty('java.vm.name')} - ${System.getProperty('java.vm.vendor')} - ${System.getProperty('java.version')} - max heap size = ${prettyBytes(getRuntime().maxMemory())}
             OS: ${System.getProperty('os.name')} - ${System.getProperty('os.arch')} - ${getRuntime().availableProcessors()} processors
-            User: ${durationMs}ms - ${vusers} vuser(s) - sample of ${sampleSec}s
+            User: ${durationMs}ms - ${vusers} vuser(s) - sample of ${sampleSec}s - warmup of ${warmupMs}ms
         """
     }
 
