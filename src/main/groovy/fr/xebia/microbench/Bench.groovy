@@ -5,7 +5,7 @@ import fr.xebia.microbench.actors.Feeder
 import fr.xebia.microbench.actors.Sampler
 import fr.xebia.microbench.actors.Summary
 import fr.xebia.microbench.actors.User
-import fr.xebia.microbench.internals.WarmUp
+
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
 
@@ -30,7 +30,15 @@ public class Bench<T> {
     Timer timer = new Timer()
 
     // warmup the test method before the measurements
-    WarmUp<T> warmup
+    Closure<Void> warmup = { long duration, Test<T> test, T objectUnderTest, Data data, Closure<Map<String, Object>> collector ->
+        println "[${new Date(currentTimeMillis())}] start warmup during ${duration}s"
+        long start = currentTimeMillis()
+        while (currentTimeMillis() - start < duration) {
+            test.call(objectUnderTest, data.next())
+        }
+        data.reset()
+        println "[${new Date(currentTimeMillis())}] end of warmup"
+    }
 
     Closure<Void> tempo = { long elapseInMs -> return }  // nothing to do
 
@@ -39,8 +47,6 @@ public class Bench<T> {
     public void start() {
         context()
         if (collector) timer.schedule({ println collector.call() } as TimerTask, 0, SECONDS.toMillis(sampleCollectorSec))
-
-        warmup = new WarmUp<>(objectUnderTest: objectUnderTest, data: data, duration: warmupMs, collector: collector)
 
         int i = 1
         for (Test<T> test : tests) {
@@ -52,7 +58,7 @@ public class Bench<T> {
     }
 
     public void call(Test<T> test) {
-        warmup.run(test)
+        warmup.call(warmupMs, test, objectUnderTest, data, collector)
 
         // initialisation of the summary
         summary = new Summary().start() as Summary
