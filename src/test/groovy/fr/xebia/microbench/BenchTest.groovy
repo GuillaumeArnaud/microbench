@@ -9,11 +9,12 @@ import static fr.xebia.microbench.internals.Collectors.getDefaultCollector
 // Test about Math.round
 new Bench<Math>(
         tests: [{ objUnderTest, Collection<Object> data -> Math.round((Float) data[0]) } as Test, new MyRound()],
-        data: new Data([[0.1f, 0.5f, 0.6f]]),
+        data: new Data([[0.1f, 0.5f, 0.6f, 0.13431515313413145f]]),
         collector: defaultCollector,
         durationMs: 10000,
         tempo: Tempo.pacing.curry(1),
-        vusers: 100
+        vusers: 10,
+        threads: 8
 ).start()
 
 @CompileStatic

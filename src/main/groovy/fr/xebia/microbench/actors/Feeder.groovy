@@ -19,7 +19,8 @@ class Feeder extends DefaultActor {
                 if (currentTimeMillis() - startMs > durationMs) {
                     // end of the benchmark.
                     // terminate all user actors
-                    users.each { Actor user -> user.terminate() }
+                    users.each { Actor user -> user.terminate();}
+                    users*.join()
                     println "[${new Date(currentTimeMillis())}] terminate";
                     terminate();
                 } else users[id].send data.next()

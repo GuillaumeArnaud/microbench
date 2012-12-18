@@ -20,6 +20,7 @@ public class Bench<T> {
     int vusers = 1
     long durationMs = 10 * 1000
     long iteration = 1
+    int threads = getRuntime().availableProcessors() * 2 + 1
 
     Sampler sampler
     Summary summary
@@ -30,14 +31,15 @@ public class Bench<T> {
     Timer timer = new Timer()
 
     // warmup the test method before the measurements
-    Closure<Void> warmup = { long duration, Test<T> test, T objectUnderTest, Data data, Closure<Map<String, Object>> collector ->
-        println "[${new Date(currentTimeMillis())}] start warmup during ${duration}s"
+    Closure<Void> warmup = { long warmupMs, Test<T> test, T objectUnderTest, Data data, Closure<Map<String, Object>> collector ->
+        println "[${new Date(currentTimeMillis())}] start warmup during ${warmupMs}s"
         long start = currentTimeMillis()
-        while (currentTimeMillis() - start < duration) {
+        while (currentTimeMillis() - start < warmupMs) {
             test.call(objectUnderTest, data.next())
         }
         data.reset()
         println "[${new Date(currentTimeMillis())}] end of warmup"
+        return
     }
 
     Closure<Void> tempo = { long elapseInMs -> return }  // nothing to do
@@ -45,7 +47,9 @@ public class Bench<T> {
     Closure<Map<String, Object>> collector = null
 
     public void start() {
+        // display context
         context()
+        // schedule the collector of JVM environment
         if (collector) timer.schedule({ println collector.call() } as TimerTask, 0, SECONDS.toMillis(sampleCollectorSec))
 
         int i = 1
@@ -67,7 +71,7 @@ public class Bench<T> {
         sampler = new Sampler(sampleNs: SECONDS.toNanos(sampleSec), iteration: iteration, summary: summary).start() as Sampler
 
         // initialisation of users
-        def group = new DefaultPGroup(vusers)
+        def group = new DefaultPGroup(threads)
         def users = new Actor[vusers]
         vusers.times {
             int id ->
@@ -95,7 +99,7 @@ public class Bench<T> {
 
             JVM: ${System.getProperty('java.vm.name')} - ${System.getProperty('java.vm.vendor')} - ${System.getProperty('java.version')} - max heap size = ${prettyBytes(getRuntime().maxMemory())}
             OS: ${System.getProperty('os.name')} - ${System.getProperty('os.arch')} - ${getRuntime().availableProcessors()} processors
-            User: ${durationMs}ms - ${vusers} vuser(s) - sample of ${sampleSec}s - warmup of ${warmupMs}ms
+            User: ${durationMs}ms - ${vusers} vuser(s) - sample of ${sampleSec}s - warmup of ${warmupMs}ms - $threads thread(s) for vusers
         """
     }
 
