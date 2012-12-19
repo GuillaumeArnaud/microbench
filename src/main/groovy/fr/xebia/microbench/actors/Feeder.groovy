@@ -1,8 +1,11 @@
 package fr.xebia.microbench.actors
 
+import fr.xebia.microbench.Bench
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.actor.DefaultActor
 
+import static fr.xebia.microbench.Bench.debug
+import static fr.xebia.microbench.Bench.getInfo
 import static java.lang.System.currentTimeMillis
 
 class Feeder extends DefaultActor {
@@ -21,7 +24,7 @@ class Feeder extends DefaultActor {
                     // terminate all user actors
                     users.each { Actor user -> user.terminate();}
                     users*.join()
-                    println "[${new Date(currentTimeMillis())}] terminate";
+                    debug.send "stop feeding the vusers";
                     terminate();
                 } else users[id].send data.next()
             }

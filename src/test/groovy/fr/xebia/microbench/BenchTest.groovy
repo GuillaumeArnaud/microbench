@@ -1,5 +1,6 @@
 package fr.xebia.microbench
 
+import fr.xebia.microbench.internals.Level
 import groovy.transform.CompileStatic
 
 // Test about Math.round
@@ -12,7 +13,8 @@ new Bench<Math>().with {
     pause(2)
     vusers = 10
     threads = 8
-    warmup(5000)
+    flow()
+    warmup(1000)
     start()
 }
 

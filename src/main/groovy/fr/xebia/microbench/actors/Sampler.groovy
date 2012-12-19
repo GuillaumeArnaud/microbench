@@ -19,7 +19,6 @@ class Sampler extends DefaultActor {
                     firstSample = measures[0]
                 } else if (measure.start - firstSample.start > sampleNs) {
                     Sample sample = new Sample(measures, iteration)
-                    println sample
                     firstSample = measure
                     measures = [measure]
                     summary.send sample

@@ -1,9 +1,9 @@
 package fr.xebia.microbench.actors
 
 import fr.xebia.microbench.internals.Sample
-import fr.xebia.microbench.internals.Utils
 import groovyx.gpars.actor.DefaultActor
 
+import static fr.xebia.microbench.Bench.getFlow
 import static fr.xebia.microbench.internals.Utils.unit
 
 class Summary extends DefaultActor {
@@ -13,6 +13,7 @@ class Summary extends DefaultActor {
     protected void act() {
         loop {
             react { Sample sample ->
+                flow sample
                 mean = (mean * count + sample.mean * sample.count) / (count + sample.count)
                 min = Math.min(min, sample.min)
                 max = Math.max(max, sample.max)

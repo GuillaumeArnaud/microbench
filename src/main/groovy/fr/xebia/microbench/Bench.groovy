@@ -1,17 +1,22 @@
 package fr.xebia.microbench
 
 import fr.xebia.microbench.actors.*
+import fr.xebia.microbench.internals.Level
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
 
 import java.lang.management.CompilationMXBean
 import java.lang.management.GarbageCollectorMXBean
 
+import static fr.xebia.microbench.actors.Console.currentLevel
+import static fr.xebia.microbench.internals.Level.DEBUG
+import static fr.xebia.microbench.internals.Level.ERROR
+import static fr.xebia.microbench.internals.Level.FLOW
+import static fr.xebia.microbench.internals.Level.INFO
 import static fr.xebia.microbench.internals.Utils.prettyBytes
 import static java.lang.Math.round
 import static java.lang.Runtime.getRuntime
 import static java.lang.System.currentTimeMillis
-import static java.lang.management.ManagementFactory.getClassLoadingMXBean
 import static java.lang.management.ManagementFactory.getClassLoadingMXBean
 import static java.lang.management.ManagementFactory.getCompilationMXBean
 import static java.lang.management.ManagementFactory.getGarbageCollectorMXBeans
@@ -25,25 +30,38 @@ public class Bench<T> {
     long durationMs = 10 * 1000
     long iteration = 1
     int threads = getRuntime().availableProcessors() * 2 + 1
-
-    Sampler sampler
-    Summary summary
     T objectUnderTest
     long warmupMs = 1000
-    Timer timer = new Timer()
+
+    private Sampler sampler
+    private Summary summary
+    private Timer timer = new Timer()
+
+    static Console info = new Console(level: INFO).start() as Console
+    static Console debug = new Console(level: DEBUG).start() as Console
+    static Console error = new Console(level: ERROR).start() as Console
+    static Console flow = new Console(level: FLOW).start() as Console
+
+    public static void info() { currentLevel = Level.INFO }
+
+    public static void debug() { currentLevel = Level.DEBUG }
+
+    public static void error() { currentLevel = Level.ERROR }
+
+    public static void flow() { currentLevel = Level.FLOW }
 
     ////////////////////////////////////////////////////
     //                      Warmup                    //
     ////////////////////////////////////////////////////
     // warmup the test method before the measurements
     private Closure<Void> defaultWarmup = { long warmupMs, Test<T> test, T objectUnderTest, Data data, Closure<Map<String, Object>> collector ->
-        println "[${new Date(currentTimeMillis())}] start warmup during ${warmupMs}ms"
+        info.send "start warmup during ${warmupMs} ms"
         long start = currentTimeMillis()
         while (currentTimeMillis() - start < warmupMs) {
             test.call(objectUnderTest, data.next())
         }
         data.reset()
-        println "[${new Date(currentTimeMillis())}] end of warmup"
+        info.send "end of warmup"
         return
     }
 
@@ -77,7 +95,7 @@ public class Bench<T> {
     ////////////////////////////////////////////////////
     //                      Data                      //
     ////////////////////////////////////////////////////
-    Data data = new Data([])
+    private Data data = new Data([])
 
     public void data(Collection<Object>... data) {
         this.data = new Data(data)
@@ -141,18 +159,18 @@ public class Bench<T> {
         // display context
         context()
         // schedule the collector of JVM environment
-        if (collector) timer.schedule({ println collector.call() } as TimerTask, 0, SECONDS.toMillis(sampleCollectorSec))
+        if (collector) timer.schedule({ flow.send collector.call() } as TimerTask, 0, SECONDS.toMillis(sampleCollectorSec))
 
         int i = 1
         for (Test<T> test : tests) {
-            println "test ${i++}"
+            info.send ">>> Test ${i++}"
             call(test)
         }
 
         timer.cancel()
     }
 
-    public void call(Test<T> test) {
+    private void call(Test<T> test) {
         warmup.call(test, objectUnderTest, data, collector)
 
         // initialisation of the summary
@@ -174,18 +192,18 @@ public class Bench<T> {
         // initialisation of feeders
         Actor feeder = new Feeder(users: users, durationMs: durationMs, data: data).start()
 
-        println "[${ new Date(currentTimeMillis()) }] start the bench"
+        info.send "start the bench"
 
         vusers.times { id -> feeder.send id }
 
         feeder.join()
 
-        println "[${ new Date(currentTimeMillis()) }] stop the bench"
-        println summary
+        info.send "stop the bench"
+        info.send summary
     }
 
-    public void context() {
-        println """
+    private void context() {
+        info.send """
             Context
 
             JVM: ${System.getProperty('java.vm.name')} - ${System.getProperty('java.vm.vendor')} - ${System.getProperty('java.version')} - max heap size = ${prettyBytes(getRuntime().maxMemory())}
