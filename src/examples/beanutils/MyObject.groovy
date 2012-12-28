@@ -1,9 +1,9 @@
-package fr.xebia.microbench.beanutils;
-
+import groovy.transform.CompileStatic
+@CompileStatic
 class MyObject {
     public Integer prop1;
     private String prop2;
-
+    private Map<String, Integer> map;
     private MyNestedObject nested = new MyNestedObject();
 
     MyNestedObject getNested() {
@@ -40,7 +40,7 @@ class MyObject {
                 '}';
     }
 
-    class MyNestedObject {
+    static class MyNestedObject {
         private String prop3 = "prop3";
 
         String getProp3() {
