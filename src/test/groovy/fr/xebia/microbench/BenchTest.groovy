@@ -1,6 +1,5 @@
 package fr.xebia.microbench
 
-import fr.xebia.microbench.internals.Level
 import groovy.transform.CompileStatic
 
 // Test about Math.round

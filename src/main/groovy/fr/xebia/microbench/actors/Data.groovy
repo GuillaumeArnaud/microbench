@@ -1,8 +1,6 @@
 package fr.xebia.microbench.actors
 
-import groovyx.gpars.actor.DefaultActor
-
-class Data extends DefaultActor {
+class Data {
 
     private Collection<Object>[] dataCollection
     private Iterator<Collection<Object>> iterator

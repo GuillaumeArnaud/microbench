@@ -16,3 +16,4 @@ a more complex example:
             vusers: 100,
             warmupMs: 10000
     ).start()
+
