@@ -1,4 +1,4 @@
-package fr.xebia.microbench.actors
+package fr.xebia.microbench
 
 class Data {
 

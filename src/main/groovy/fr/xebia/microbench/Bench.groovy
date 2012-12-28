@@ -1,18 +1,17 @@
 package fr.xebia.microbench
 
 import fr.xebia.microbench.actors.*
-import fr.xebia.microbench.internals.Level
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
 
 import java.lang.management.CompilationMXBean
 import java.lang.management.GarbageCollectorMXBean
 
-import static fr.xebia.microbench.actors.Console.currentLevel
-import static fr.xebia.microbench.internals.Level.DEBUG
-import static fr.xebia.microbench.internals.Level.ERROR
-import static fr.xebia.microbench.internals.Level.FLOW
-import static fr.xebia.microbench.internals.Level.INFO
+import static Logger.currentLevel
+import static Level.DEBUG
+import static Level.ERROR
+import static Level.FLOW
+import static Level.INFO
 import static fr.xebia.microbench.internals.Utils.prettyBytes
 import static java.lang.Math.round
 import static java.lang.Runtime.getRuntime
@@ -34,13 +33,13 @@ public class Bench<T> {
     long warmupMs = 1000
 
     private Sampler sampler
-    private Summary summary
+    private Summarizer summary
     private Timer timer = new Timer()
 
-    static Console info = new Console(level: INFO).start() as Console
-    static Console debug = new Console(level: DEBUG).start() as Console
-    static Console error = new Console(level: ERROR).start() as Console
-    static Console flow = new Console(level: FLOW).start() as Console
+    static Logger info = new Logger(level: INFO).start() as Logger
+    static Logger debug = new Logger(level: DEBUG).start() as Logger
+    static Logger error = new Logger(level: ERROR).start() as Logger
+    static Logger flow = new Logger(level: FLOW).start() as Logger
 
     public static void info() { currentLevel = Level.INFO }
 
@@ -174,7 +173,7 @@ public class Bench<T> {
         warmup.call(test, objectUnderTest, data, collector)
 
         // initialisation of the summary
-        summary = new Summary().start() as Summary
+        summary = new Summarizer().start() as Summarizer
 
         // initialisation of the sampler
         sampler = new Sampler(sampleNs: SECONDS.toNanos(sampleSec), iteration: iteration, summary: summary).start() as Sampler

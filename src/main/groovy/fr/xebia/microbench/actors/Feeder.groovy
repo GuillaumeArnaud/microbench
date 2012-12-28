@@ -1,11 +1,10 @@
 package fr.xebia.microbench.actors
 
-import fr.xebia.microbench.Bench
+import fr.xebia.microbench.Data
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.actor.DefaultActor
 
 import static fr.xebia.microbench.Bench.debug
-import static fr.xebia.microbench.Bench.getInfo
 import static java.lang.System.currentTimeMillis
 
 class Feeder extends DefaultActor {

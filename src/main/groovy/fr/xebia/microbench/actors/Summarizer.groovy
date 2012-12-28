@@ -6,7 +6,7 @@ import groovyx.gpars.actor.DefaultActor
 import static fr.xebia.microbench.Bench.getFlow
 import static fr.xebia.microbench.internals.Utils.unit
 
-class Summary extends DefaultActor {
+class Summarizer extends DefaultActor {
     protected float mean = 0, min = Float.MAX_VALUE, max = Float.MIN_VALUE
     protected long count = 0
 

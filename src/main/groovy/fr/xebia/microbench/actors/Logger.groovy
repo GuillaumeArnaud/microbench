@@ -1,10 +1,10 @@
 package fr.xebia.microbench.actors
 
-import fr.xebia.microbench.internals.Level
+import fr.xebia.microbench.Level
 import groovyx.gpars.actor.DefaultActor
 
 
-class Console extends DefaultActor {
+class Logger extends DefaultActor {
 
     public Level level
     public static Level currentLevel

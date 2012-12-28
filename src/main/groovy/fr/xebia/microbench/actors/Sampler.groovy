@@ -9,7 +9,7 @@ class Sampler extends DefaultActor {
     private Measure firstSample = null
     private long sampleNs = 0
     private long iteration = 1
-    public Summary summary
+    public Summarizer summary
 
     protected void act() {
         loop {

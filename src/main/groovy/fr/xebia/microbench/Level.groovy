@@ -1,4 +1,4 @@
-package fr.xebia.microbench.internals
+package fr.xebia.microbench
 
 enum Level {
     DEBUG, FLOW, INFO, ERROR
