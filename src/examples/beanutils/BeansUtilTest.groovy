@@ -29,7 +29,7 @@ new Bench().with {
 class MyTest implements Test<BeanUtils> {
 
     @Override
-    void call(BeanUtils objectUnderTest, Collection<Object> data) {
+    Object call(BeanUtils objectUnderTest, Collection<Object> data) {
         BeanUtils.copyProperties(data.iterator().next(), data.iterator().next())
     }
 }

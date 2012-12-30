@@ -30,11 +30,12 @@ public class Bench<T> {
     long iteration = 1
     int threads = getRuntime().availableProcessors() * 2 + 1
     T objectUnderTest
-    long warmupMs = 1000
+    private Timer timer = new Timer()
 
+    long warmupMs = 1000
     private Sampler sampler
     private Summarizer summary
-    private Timer timer = new Timer()
+    private Validator validator = null
 
     static Logger info = new Logger(level: INFO).start() as Logger
     static Logger debug = new Logger(level: DEBUG).start() as Logger
