@@ -11,10 +11,10 @@ class Tests {
 
     public static void testRound() {
 
-        def test = { objUnderTest, Collection<Object> data -> Math.round((Float)data[0]) } as Test
+        def test = { objUnderTest, Collection<Object> data -> Math.round((Float) data[0]) } as Test
 
         new Bench(
-                test:test,
+                test: test,
                 vusers: 1,
                 durationMs: SECONDS.toMillis(10),
                 iteration: 1,
@@ -63,7 +63,7 @@ class MyRound implements Test<Object> {
 
     @Override
     void call(Object objectUnderTest, Collection<Object> data) {
-        Math.round((Float)data.iterator().next())
+        Math.round((Float) data.iterator().next())
     }
 }
 

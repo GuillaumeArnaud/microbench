@@ -35,7 +35,6 @@ public class Bench<T> {
     long warmupMs = 1000
     private Sampler sampler
     private Summarizer summary
-    private Validator validator = null
 
     static Logger info = new Logger(level: INFO).start() as Logger
     static Logger debug = new Logger(level: DEBUG).start() as Logger
@@ -99,6 +98,15 @@ public class Bench<T> {
 
     public void data(Collection<Object>... data) {
         this.data = new Data(data)
+    }
+
+    ////////////////////////////////////////////////////
+    //                    Validator                   //
+    ////////////////////////////////////////////////////
+    private Validator validator = null
+
+    public void validate(Validation validation) {
+        if (validation) validator = new Validator(validation: validation).start() as Validator
     }
 
     ////////////////////////////////////////////////////
@@ -184,7 +192,7 @@ public class Bench<T> {
         def users = new Actor[vusers]
         vusers.times {
             int id ->
-                def user = new User<T>(id: id, tempo: tempo, sampler: sampler, iteration: iteration, test: test, objUnderTest: objectUnderTest)
+                def user = new User<T>(id: id, tempo: tempo, sampler: sampler, iteration: iteration, test: test, objUnderTest: objectUnderTest, validator: validator)
                 user.setParallelGroup(group)
                 users[id] = user.start()
         }

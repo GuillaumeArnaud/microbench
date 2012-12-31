@@ -1,10 +1,13 @@
 package fr.xebia.microbench.actors
 
-import fr.xebia.microbench.Bench
 import fr.xebia.microbench.Validation
 import groovyx.gpars.actor.DefaultActor
 
 import java.util.concurrent.atomic.AtomicLong
+
+import static fr.xebia.microbench.Bench.error
+import static fr.xebia.microbench.Bench.getDebug
+import static fr.xebia.microbench.Bench.getError
 
 class Validator extends DefaultActor {
 
@@ -15,9 +18,12 @@ class Validator extends DefaultActor {
         loop {
             react { Map<String, Object> dataAndResult ->
                 if (dataAndResult.containsKey("data") && dataAndResult.containsKey("result")) {
-                    validation.valid(dataAndResult.data as Collection<Object>, dataAndResult.result)
+                    if (!validation.valid(dataAndResult.data as Collection<Object>, dataAndResult.result)) {
+                        error "the result is not valid with the given data: $dataAndResult"
+                    }
+
                 } else {
-                    Bench.error "cant't get result from $dataAndResult"
+                    error "cant't get result from $dataAndResult"
                     errors.incrementAndGet()
                 }
             }

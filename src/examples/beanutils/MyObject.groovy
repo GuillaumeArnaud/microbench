@@ -1,4 +1,5 @@
 import groovy.transform.CompileStatic
+
 @CompileStatic
 class MyObject {
     public Integer prop1;
@@ -48,7 +49,7 @@ class MyObject {
         }
 
         void setProp3(String prop3) {
-            this.prop3 = prop3 ;
+            this.prop3 = prop3;
         }
 
         @Override

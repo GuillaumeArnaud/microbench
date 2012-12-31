@@ -12,7 +12,8 @@ new Bench<Math>().with {
     pause(2)
     vusers = 10
     threads = 8
-    flow()
+    validate({ data, result -> if (data[0] == 0.1f) return result == 0 else true } as Validation)
+    debug()
     warmup(1000)
     start()
 }
@@ -21,7 +22,7 @@ new Bench<Math>().with {
 class MyRound implements Test<Math> {
 
     @Override
-    void call(Math objectUnderTest, Collection<Object> data) {
+    Object call(Math objectUnderTest, Collection<Object> data) {
         Math.round((Float) data.iterator().next())
     }
 }

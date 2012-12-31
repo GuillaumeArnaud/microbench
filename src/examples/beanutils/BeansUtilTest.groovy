@@ -31,5 +31,6 @@ class MyTest implements Test<BeanUtils> {
     @Override
     Object call(BeanUtils objectUnderTest, Collection<Object> data) {
         BeanUtils.copyProperties(data.iterator().next(), data.iterator().next())
+        true
     }
 }

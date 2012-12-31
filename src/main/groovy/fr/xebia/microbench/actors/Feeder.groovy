@@ -21,7 +21,7 @@ class Feeder extends DefaultActor {
                 if (currentTimeMillis() - startMs > durationMs) {
                     // end of the benchmark.
                     // terminate all user actors
-                    users.each { Actor user -> user.terminate();}
+                    users.each { Actor user -> user.terminate(); }
                     users*.join()
                     debug.send "stop feeding the vusers";
                     terminate();
