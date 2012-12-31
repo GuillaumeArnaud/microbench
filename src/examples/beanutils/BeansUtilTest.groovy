@@ -1,5 +1,6 @@
 import fr.xebia.microbench.Bench
 import fr.xebia.microbench.Test
+import fr.xebia.microbench.Validation
 import groovy.transform.CompileStatic
 @Grapes(
 @Grab(group = 'commons-beanutils', module = 'commons-beanutils', version = '1.8.3')
@@ -21,6 +22,7 @@ new Bench().with {
             [new MyObject(), new MyObject(prop1: 20, prop2: "prop20", nested: new MyObject.MyNestedObject(prop3: "prop32"), map: ["key": 2])],
             [new MyObject(), new MyObject(prop1: 30, prop2: "prop30", nested: new MyObject.MyNestedObject(prop3: "prop33"), map: ["key": 3])],
     )
+    validate({ data, result -> data[0].prop1 != null } as Validation)
     defaultCollector()
     start()
 }

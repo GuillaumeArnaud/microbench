@@ -34,7 +34,7 @@ public class Bench<T> {
 
     long warmupMs = 1000
     private Sampler sampler
-    private Summarizer summary
+    private Summarizer summarizer
 
     static Logger info = new Logger(level: INFO).start() as Logger
     static Logger debug = new Logger(level: DEBUG).start() as Logger
@@ -182,10 +182,10 @@ public class Bench<T> {
         warmup.call(test, objectUnderTest, data, collector)
 
         // initialisation of the summary
-        summary = new Summarizer().start() as Summarizer
+        summarizer = new Summarizer().start() as Summarizer
 
         // initialisation of the sampler
-        sampler = new Sampler(sampleNs: SECONDS.toNanos(sampleSec), iteration: iteration, summary: summary).start() as Sampler
+        sampler = new Sampler(sampleNs: SECONDS.toNanos(sampleSec), iteration: iteration, summary: summarizer).start() as Sampler
 
         // initialisation of users
         def group = new DefaultPGroup(threads)
@@ -207,7 +207,8 @@ public class Bench<T> {
         feeder.join()
 
         info.send "stop the bench"
-        info.send summary
+        info.send "error(s): ${validator?.errors?.get()}"
+        info.send summarizer
     }
 
     private void context() {
