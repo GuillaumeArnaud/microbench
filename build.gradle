@@ -20,6 +20,10 @@ dependencies {
     groovy group: 'org.codehaus.gpars', name: 'gpars', version: "1.0.0-rc1"
 }
 
+jar {
+    from "LICENSE.txt"
+}
+
 uploadArchives {
     repositories {
         flatDir {
