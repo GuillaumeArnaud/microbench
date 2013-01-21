@@ -18,11 +18,13 @@ package fr.xebia.microbench.actors
 import fr.xebia.microbench.Level
 import groovyx.gpars.actor.DefaultActor
 
+import static fr.xebia.microbench.Level.INFO
+
 
 class Logger extends DefaultActor {
 
     public Level level
-    public static Level currentLevel
+    public static Level currentLevel = INFO
 
     @Override
     protected void act() {
