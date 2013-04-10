@@ -16,8 +16,10 @@
 package fr.xebia.microbench
 
 import fr.xebia.microbench.actors.*
+import groovy.transform.TypeChecked
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
+import org.codehaus.groovy.control.CompilerConfiguration
 
 import java.lang.management.CompilationMXBean
 import java.lang.management.GarbageCollectorMXBean
@@ -56,13 +58,13 @@ public class Bench<T> {
     static Logger error = new Logger(level: ERROR).start() as Logger
     static Logger flow = new Logger(level: FLOW).start() as Logger
 
-    public static void info() { currentLevel = Level.INFO }
-
     public static void debug() { currentLevel = Level.DEBUG }
 
     public static void error() { currentLevel = Level.ERROR }
 
     public static void flow() { currentLevel = Level.FLOW }
+
+    public static void info() { currentLevel = Level.INFO }
 
     ////////////////////////////////////////////////////
     //                      Warmup                    //
@@ -129,6 +131,7 @@ public class Bench<T> {
     ////////////////////////////////////////////////////
     private Test<T>[] tests = []
 
+    @TypeChecked
     public void tests(Test<T>... tests) {
         this.tests = tests
     }
