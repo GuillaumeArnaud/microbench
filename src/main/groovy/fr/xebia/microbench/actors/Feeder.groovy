@@ -26,7 +26,7 @@ class Feeder extends DefaultActor {
 
     private long startMs
     private Actor[] users = null
-    private durationMs = 10 * 1000
+    private durationMs
     private Data data
 
     protected void act() {

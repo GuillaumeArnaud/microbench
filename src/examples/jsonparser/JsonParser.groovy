@@ -12,9 +12,14 @@ import groovy.json.JsonBuilder
 import net.minidev.json.parser.JSONParser
 import org.codehaus.jackson.map.ObjectMapper
 
+
+// Init
+
 def smart = new JSONParser(JSONParser.MODE_PERMISSIVE)
 def mapperObject = new ObjectMapper()
 def argoParser = new JdomParser()
+
+// Data
 
 def builder = new JsonBuilder()
 builder.people {
@@ -39,17 +44,23 @@ def car = builder.toString()
 
 println "data:\n$moi\n$car"
 
+// Bench
 new Bench().with {
     flow()
-    vusers = 1
-    warmup(5000)
-    durationMs = 40000
+    vusers(1)
+    warmup(5)
+    duration(10)
+    threads(9)
+    iteration(1)
+    collectorInterval(10)
+    sampleInterval(5)
+
     tests(
             { o, d -> return mapperObject.readTree(d[0] as String) } as Test,
             { o, d -> return smart.parse(d[0] as String) } as Test,
             { o, d -> return argoParser.parse(d[0] as String) } as Test,
     )
-    validate({ d, r -> r != null } as Validation)
+    //validate({ d, r -> r != null } as Validation)
     detailedCollector()
     data([moi], [car])
     start()

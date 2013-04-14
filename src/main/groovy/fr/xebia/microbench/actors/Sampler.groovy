@@ -22,7 +22,7 @@ import groovyx.gpars.actor.DefaultActor
 class Sampler extends DefaultActor {
     private Collection<Measure> measures = []
     private Measure firstSample = null
-    private long sampleNs = 0
+    private long sampleIntervalNs = 0
     private long iteration = 1
     public Summarizer summary
 
@@ -32,7 +32,7 @@ class Sampler extends DefaultActor {
                 if (measures.size() == 0) {
                     measures.add(measure)
                     firstSample = measures[0]
-                } else if (measure.start - firstSample.start > sampleNs) {
+                } else if (measure.start - firstSample.start > sampleIntervalNs) {
                     Sample sample = new Sample(measures, iteration)
                     firstSample = measure
                     measures = [measure]
