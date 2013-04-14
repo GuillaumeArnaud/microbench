@@ -50,8 +50,7 @@ class User<T> extends DefaultActor {
         // init
         long start = nanoTime()
         // call
-        //for (int i = 0; i < iteration; i++) result =
-            test.call(objUnderTest, data)
+        for (int i = 0; i < iteration; i++) result = test.call(objUnderTest, data)
         // measure
         long elapse = nanoTime() - start
         sampler.send new Measure(start, elapse)

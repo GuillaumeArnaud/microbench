@@ -1,0 +1,56 @@
+@Grapes([
+@Grab(group = 'net.minidev', module = 'json-smart', version = '2.0-RC2'),
+@Grab(group = 'net.sourceforge.argo', module = 'argo', version = '3.3'),
+@Grab(group = 'org.codehaus.jackson', module = 'jackson-mapper-asl', version = '1.9.12')
+]
+)
+import fr.xebia.microbench.Bench
+import argo.jdom.JdomParser
+import fr.xebia.microbench.Test
+import fr.xebia.microbench.Validation
+import groovy.json.JsonBuilder
+import net.minidev.json.parser.JSONParser
+import org.codehaus.jackson.map.ObjectMapper
+
+def smart = new JSONParser(JSONParser.MODE_PERMISSIVE)
+def mapperObject = new ObjectMapper()
+def argoParser = new JdomParser()
+
+def builder = new JsonBuilder()
+builder.people {
+    nom 'Arnaud'
+    prenom 'Guillaume'
+    addresse '40 rue de la justice'
+    age 36
+    enfants 'camille', 'apolline'
+    femme {
+        nom 'Arnaud Kounkou'
+        prenom 'Raphaëlle'
+        age 35
+    }
+}
+def moi = builder.toString()
+builder.voiture {
+    marque 'citroën'
+    portes 5
+    automatique false
+}
+def car = builder.toString()
+
+println "data:\n$moi\n$car"
+
+new Bench().with {
+    flow()
+    vusers = 1
+    warmup(5000)
+    durationMs = 40000
+    tests(
+            { o, d -> return mapperObject.readTree(d[0] as String) } as Test,
+            { o, d -> return smart.parse(d[0] as String) } as Test,
+            { o, d -> return argoParser.parse(d[0] as String) } as Test,
+    )
+    validate({ d, r -> r != null } as Validation)
+    detailedCollector()
+    data([moi], [car])
+    start()
+}

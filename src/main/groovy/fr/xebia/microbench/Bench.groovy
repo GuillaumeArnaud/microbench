@@ -19,23 +19,17 @@ import fr.xebia.microbench.actors.*
 import groovy.transform.TypeChecked
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
-import org.codehaus.groovy.control.CompilerConfiguration
 
 import java.lang.management.CompilationMXBean
 import java.lang.management.GarbageCollectorMXBean
 
+import static Level.*
 import static Logger.currentLevel
-import static Level.DEBUG
-import static Level.ERROR
-import static Level.FLOW
-import static Level.INFO
 import static fr.xebia.microbench.internals.Utils.prettyBytes
 import static java.lang.Math.round
 import static java.lang.Runtime.getRuntime
 import static java.lang.System.currentTimeMillis
-import static java.lang.management.ManagementFactory.getClassLoadingMXBean
-import static java.lang.management.ManagementFactory.getCompilationMXBean
-import static java.lang.management.ManagementFactory.getGarbageCollectorMXBeans
+import static java.lang.management.ManagementFactory.*
 import static java.util.concurrent.TimeUnit.NANOSECONDS
 import static java.util.concurrent.TimeUnit.SECONDS
 
@@ -225,7 +219,9 @@ public class Bench<T> {
         feeder.join()
 
         info.send "stop the bench"
+        sleep(100)
         info.send "error(s): ${validator?.errors?.get()}"
+        sleep(100)
         info.send summarizer
     }
 
