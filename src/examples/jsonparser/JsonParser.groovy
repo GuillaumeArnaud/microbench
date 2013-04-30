@@ -23,14 +23,14 @@ def argoParser = new JdomParser()
 
 def builder = new JsonBuilder()
 builder.people {
-    nom 'Arnaud'
-    prenom 'Guillaume'
-    addresse '40 rue de la justice'
+    nom 'Simpson'
+    prenom 'Homer'
+    addresse 'Evergreen'
     age 36
-    enfants 'camille', 'apolline'
+    enfants 'Bart', 'Lisa', 'Maggie'
     femme {
-        nom 'Arnaud Kounkou'
-        prenom 'Raphaëlle'
+        nom 'Simpson'
+        prenom 'Marge'
         age 35
     }
 }

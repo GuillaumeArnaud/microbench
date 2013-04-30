@@ -10,7 +10,7 @@ import org.apache.commons.beanutils.PropertyUtils
 
 new Bench().with {
     vusers = 1
-    durationMs = 10000
+    durationSec = 10000
     warmup(1000)
     tests(
             new MyTest(),

@@ -42,7 +42,7 @@ public class Bench<T> {
     int threads = getRuntime().availableProcessors() * 2 + 1
     T objectUnderTest
     private Timer timer = new Timer()
-    long warmupSec = 1000
+    long warmupSec = 5
 
     ////////////////////////////////////////////////////
     //                     Run                        //
@@ -160,13 +160,13 @@ public class Bench<T> {
     static Logger error = new Logger(level: ERROR).start() as Logger
     static Logger flow = new Logger(level: FLOW).start() as Logger
 
+    public static void info() { currentLevel = Level.INFO }
+
     public static void debug() { currentLevel = Level.DEBUG }
 
     public static void error() { currentLevel = Level.ERROR }
 
     public static void flow() { currentLevel = Level.FLOW }
-
-    public static void info() { currentLevel = Level.INFO }
 
     ////////////////////////////////////////////////////
     //                      Warmup                    //

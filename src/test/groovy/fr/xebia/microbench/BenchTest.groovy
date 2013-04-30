@@ -9,7 +9,7 @@ new Bench<Math>().with {
     tests(new MyRoundJava(), new MyRound(),new MyRoundJava(),new MyRound())
     data([0.1f], [0.5f], [0.6f], [0.13431515313413145f])
     defaultCollector()
-    durationMs = 10000
+    durationSec = 10000
     pause(2)
     vusers = 10
     threads = 8
