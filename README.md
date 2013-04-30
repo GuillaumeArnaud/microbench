@@ -20,7 +20,7 @@ a more complex example:
 
 # goal
 
-*microbenchm* has the ambition to:
+*microbench* has the ambition to:
 
 +   avoid some common pitfalls during the benchmark of java method (inlining, warmup, data input ...)
 +   facilitate the data input injection
@@ -41,11 +41,33 @@ The inside process uses the actor pattern thank to the gpars library. The severa
 6.  the summarizer actor computes global results (mean, min, max ...)
 7.  all logs are sent to the logger actor
 
+# how to build
+
+You can build the project by calling gradle:
+
+    ?> graddle package
+
 # how to use it
 
-see examples directory
+For calling the bench, add the microbench jar in the groovy classpath in addition to your script. For instance:
+
+    ?> groovy -cp microbench.jar my_script.groovy
+
+See examples directory.
+
 
 # Methods
+
+Basically the best way to define the benchmark is to follow this pattern:
+
+    new Bench() {
+        tests({objectUnderTest, data -> my_test} as Test)
+        duration(60)
+        start()
+    }
+
+You can define Test classes inside other files of course, that can be useful for adding @CompileStatic annotations or
+call java classes.
 
 ## test
 
@@ -56,7 +78,10 @@ The tests are defined by the method:
 
 A quick way to define the tests methods:
 
-    tests({objectUnderTest, data -> my_test_here})
+    tests(
+        {objectUnderTest, data -> my_first_test_here} as Test,
+        {objectUnderTest, data -> my_second_test_here} as Test
+    )
 
 ## technical parameters
 
@@ -72,7 +97,6 @@ A lot of parameters can be configured:
 
     collectorInterval(int collectorIntervalSec = 5) : Set the interval in second between two collects
     iteration(long iteration = 1): Number of iteration at each run. By default the value is 1, if this
-
     number increases, a risk of inlining exists.
 
 
