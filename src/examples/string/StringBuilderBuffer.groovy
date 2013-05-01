@@ -1,6 +1,6 @@
-import fr.xebia.microbench.Bench
-import fr.xebia.microbench.Test
-import fr.xebia.microbench.Validation
+import fr.xebia.gpressure.Bench
+import fr.xebia.gpressure.Test
+import fr.xebia.gpressure.Validation
 
 
 new Bench().with {
@@ -26,7 +26,7 @@ new Bench().with {
             } as Test
     )
 
-    //validate({o,r -> r.toString()=="abcdefghij"} as Validation)
+    validate({o,r -> r.toString()=="abcdefghij"} as Validation)
     start()
 }
 

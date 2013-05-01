@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench.actors
+package fr.xebia.gpressure.actors
 
-import fr.xebia.microbench.internals.Measure
-import fr.xebia.microbench.internals.Sample
+import fr.xebia.gpressure.internals.Measure
+import fr.xebia.gpressure.internals.Sample
 import groovyx.gpars.actor.DefaultActor
 
 class Sampler extends DefaultActor {

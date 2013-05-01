@@ -13,23 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench.internals
+package fr.xebia.gpressure.internals
 
-import static fr.xebia.microbench.internals.Utils.unit
+class Measure {
+    public long start
+    protected long elapse
 
-class Sample {
-    public float mean, min, max
-    public long count
-
-    public Sample(Collection<Measure> measures, long iteration) {
-        def elapsed = measures.collect { measure -> measure.elapse }
-        count = iteration * measures.size()
-        mean = elapsed.sum() / count
-        min = elapsed.min() / iteration
-        max = elapsed.max() / iteration
+    Measure(long start, long elapse) {
+        this.start = start
+        this.elapse = elapse
     }
-
-
-
-    public String toString() { "mean=${unit mean}, min=${unit min}, max=${unit max}, count=$count" }
 }

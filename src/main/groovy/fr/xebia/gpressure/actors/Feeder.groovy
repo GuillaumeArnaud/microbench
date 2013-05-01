@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench.actors
+package fr.xebia.gpressure.actors
 
-import fr.xebia.microbench.Data
+import fr.xebia.gpressure.Data
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.actor.DefaultActor
 
-import static fr.xebia.microbench.Bench.debug
+import static fr.xebia.gpressure.Bench.debug
 import static java.lang.System.currentTimeMillis
 
 class Feeder extends DefaultActor {

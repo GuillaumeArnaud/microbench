@@ -1,4 +1,4 @@
-package fr.xebia.microbench;
+package fr.xebia.gpressure;
 
 public class TestInJava {
     public static void main(String[] args) {

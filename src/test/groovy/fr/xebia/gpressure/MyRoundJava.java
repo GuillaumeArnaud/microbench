@@ -1,4 +1,4 @@
-package fr.xebia.microbench;
+package fr.xebia.gpressure;
 
 import java.util.Collection;
 

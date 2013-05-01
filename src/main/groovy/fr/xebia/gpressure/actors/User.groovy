@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench.actors
+package fr.xebia.gpressure.actors
 
-import fr.xebia.microbench.Test
-import fr.xebia.microbench.internals.Measure
+import fr.xebia.gpressure.Test
+import fr.xebia.gpressure.internals.Measure
 import groovy.transform.CompileStatic
 import groovyx.gpars.actor.DefaultActor
 

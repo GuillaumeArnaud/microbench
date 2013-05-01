@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench.internals
+package fr.xebia.gpressure.actors
 
-class Measure {
-    public long start
-    protected long elapse
+import fr.xebia.gpressure.Level
+import groovyx.gpars.actor.DefaultActor
 
-    Measure(long start, long elapse) {
-        this.start = start
-        this.elapse = elapse
+import static fr.xebia.gpressure.Level.INFO
+
+
+class Logger extends DefaultActor {
+
+    public Level level
+    public static Level currentLevel = INFO
+
+    @Override
+    protected void act() {
+        loop {
+            react { msg -> if (currentLevel <= level) println msg }
+        }
     }
 }

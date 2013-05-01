@@ -1,6 +1,6 @@
-import fr.xebia.microbench.Bench
-import fr.xebia.microbench.Test
-import fr.xebia.microbench.Validation
+import fr.xebia.gpressure.Bench
+import fr.xebia.gpressure.Test
+import fr.xebia.gpressure.Validation
 import groovy.transform.CompileStatic
 @Grapes(
 @Grab(group = 'commons-beanutils', module = 'commons-beanutils', version = '1.8.3')

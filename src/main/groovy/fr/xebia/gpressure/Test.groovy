@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench
+package fr.xebia.gpressure
 
-enum Level {
-    DEBUG, FLOW, INFO, ERROR
+import groovy.transform.CompileStatic
+import groovy.transform.TypeChecked
+
+@CompileStatic
+interface Test<T> {
+    @TypeChecked
+    public Object call(T objectUnderTest, Collection<Object> data);
 }

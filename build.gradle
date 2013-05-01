@@ -1,12 +1,11 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
+group = 'fr.xebia'
+artifact = 'gpressure'
 version = '0.1'
 
 project.ext {
-    group = 'fr.xebia'
-    artifact = 'microbench'
-
     bundleDir = "$buildDir/bundle"
     groovyVersion = "2.1.0-rc-3"
 }
@@ -37,8 +36,8 @@ task pom << {
         project {
             groupId project.ext.group
             artifactId project.ext.artifact
-            name 'microbench'
-            description 'Benchmark your java/groovy methods'
+            name 'gpressure'
+            description 'Run your java/groovy methods under pressure'
             url ''
             licenses {
                 license {
@@ -48,12 +47,12 @@ task pom << {
                 }
             }
             scm {
-                url 'http://github.com/GuillaumeArnaud/microbench'
+                url 'http://github.com/GuillaumeArnaud/gpressure'
             }
             developers {
                 developer {
                     name 'Guillaume Arnaud'
-                    email 'garnaud25@gmail.com'
+                    email 'garnaud@xebia.fr'
                     url 'https://twitter.com/guillarnaud'
                 }
             }

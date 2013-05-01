@@ -4,10 +4,10 @@
 @Grab(group = 'org.codehaus.jackson', module = 'jackson-mapper-asl', version = '1.9.12')
 ]
 )
-import fr.xebia.microbench.Bench
+import fr.xebia.gpressure.Bench
 import argo.jdom.JdomParser
-import fr.xebia.microbench.Test
-import fr.xebia.microbench.Validation
+import fr.xebia.gpressure.Test
+import fr.xebia.gpressure.Validation
 import groovy.json.JsonBuilder
 import net.minidev.json.parser.JSONParser
 import org.codehaus.jackson.map.ObjectMapper

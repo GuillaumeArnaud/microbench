@@ -13,23 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench.actors
+package fr.xebia.gpressure
 
-import fr.xebia.microbench.Level
-import groovyx.gpars.actor.DefaultActor
-
-import static fr.xebia.microbench.Level.INFO
-
-
-class Logger extends DefaultActor {
-
-    public Level level
-    public static Level currentLevel = INFO
-
-    @Override
-    protected void act() {
-        loop {
-            react { msg -> if (currentLevel <= level) println msg }
-        }
-    }
+public interface Validation {
+    public boolean valid(Collection<Object> data, Object result)
 }

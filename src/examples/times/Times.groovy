@@ -1,5 +1,5 @@
-import fr.xebia.microbench.Bench
-import fr.xebia.microbench.Test
+import fr.xebia.gpressure.Bench
+import fr.xebia.gpressure.Test
 import groovy.transform.CompileStatic
 
 new Bench().with {

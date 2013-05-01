@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench
+package fr.xebia.gpressure
 
-import fr.xebia.microbench.actors.*
+import fr.xebia.gpressure.actors.*
 import groovy.transform.TypeChecked
 import groovyx.gpars.actor.Actor
 import groovyx.gpars.group.DefaultPGroup
@@ -25,7 +25,7 @@ import java.lang.management.GarbageCollectorMXBean
 
 import static Level.*
 import static Logger.currentLevel
-import static fr.xebia.microbench.internals.Utils.prettyBytes
+import static fr.xebia.gpressure.internals.Utils.prettyBytes
 import static java.lang.Math.round
 import static java.lang.Runtime.getRuntime
 import static java.lang.System.currentTimeMillis

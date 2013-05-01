@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench.actors
+package fr.xebia.gpressure.actors
 
-import fr.xebia.microbench.Validation
+import fr.xebia.gpressure.Validation
 import groovyx.gpars.actor.DefaultActor
 
 import java.util.concurrent.atomic.AtomicLong
 
-import static fr.xebia.microbench.Bench.error
-import static fr.xebia.microbench.Bench.flow
+import static fr.xebia.gpressure.Bench.error
+import static fr.xebia.gpressure.Bench.flow
 
 class Validator extends DefaultActor {
 

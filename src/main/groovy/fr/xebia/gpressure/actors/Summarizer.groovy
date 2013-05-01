@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.xebia.microbench.actors
+package fr.xebia.gpressure.actors
 
-import fr.xebia.microbench.internals.Sample
+import fr.xebia.gpressure.internals.Sample
 import groovyx.gpars.actor.DefaultActor
 
-import static fr.xebia.microbench.Bench.getFlow
-import static fr.xebia.microbench.internals.Utils.unit
+import static fr.xebia.gpressure.Bench.getFlow
+import static fr.xebia.gpressure.internals.Utils.unit
 
 class Summarizer extends DefaultActor {
     protected float mean = 0, min = Float.MAX_VALUE, max = Float.MIN_VALUE
